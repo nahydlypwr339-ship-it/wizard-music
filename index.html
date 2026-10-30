@@ -154,16 +154,19 @@ footer {
 </footer>
 
 <script>
-let songs = [];
-
+let songs = [
+    {
+        name: "آهنگ جدید",
+        url: "https://dxunbkvzvpdesoraokve.supabase.co/storage/v1/object/public/music/meta-1169070455%20(1).mp3"
+    }
+];
 function renderSongs() {
     const box = document.getElementById("songs");
     box.innerHTML = "";
 
     if (songs.length === 0) {
         box.innerHTML = "<p>هنوز آهنگی اضافه نشده است.</p>";
-        return;
-    }
+        return;    }
 
     songs.forEach((song, index) => {
         box.innerHTML += `
