@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WIZARD MUSIC</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Tahoma, sans-serif;
+    background: #090914;
+    color: white;
+}
+
+header {
+    background: linear-gradient(135deg, #6c25ff, #17102f);
+    padding: 35px 15px;
+    text-align: center;
+}
+
+header h1 {
+    font-size: 32px;
+    margin: 0;
+    letter-spacing: 2px;
+}
+
+header p {
+    color: #ddd;
+}
+
+.container {
+    max-width: 850px;
+    margin: auto;
+    padding: 20px;
+}
+
+.search {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid #713cff;
+    border-radius: 12px;
+    background: #171729;
+    color: white;
+    margin-bottom: 20px;
+    font-size: 16px;
+}
+
+.song {
+    background: #19192b;
+    padding: 17px;
+    border-radius: 15px;
+    margin-bottom: 15px;
+    border: 1px solid #292944;
+}
+
+.song h3 {
+    margin-top: 0;
+}
+
+audio {
+    width: 100%;
+    margin-top: 10px;
+}
+
+button {
+    background: #713cff;
+    color: white;
+    border: none;
+    padding: 12px 18px;
+    border-radius: 10px;
+    cursor: pointer;
+    margin: 5px;
+}
+
+button:hover {
+    background: #925fff;
+}
+
+.upload {
+    background: #19192b;
+    padding: 20px;
+    border-radius: 15px;
+    margin-top: 25px;
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 12px;
+    background: #101020;
+    color: white;
+    border: 1px solid #555;
+    border-radius: 10px;
+    margin: 10px 0;
+}
+
+footer {
+    text-align: center;
+    color: #888;
+    padding: 30px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>🎵 WIZARD MUSIC</h1>
+    <p>دنیای موسیقی در یک جا</p>
+</header>
+
+<div class="container">
+
+    <input
+        class="search"
+        type="text"
+        id="search"
+        placeholder="جستجوی آهنگ..."
+        oninput="searchSongs()"
+    >
+
+    <h2>🎧 آهنگ‌ها</h2>
+
+    <div id="songs">
+        <p>هنوز آهنگی اضافه نشده است.</p>
+    </div>
+
+    <div class="upload">
+        <h2>➕ اضافه کردن آهنگ</h2>
+
+        <input
+            type="text"
+            id="songName"
+            placeholder="نام آهنگ"
+        >
+
+        <input
+            type="file"
+            id="songFile"
+            accept="audio/*"
+        >
+
+        <button onclick="addSong()">افزودن آهنگ</button>
+    </div>
+
+</div>
+
+<footer>
+    © 2026 WIZARD MUSIC
+</footer>
+
+<script>
+let songs = [];
+
+function renderSongs() {
+    const box = document.getElementById("songs");
+    box.innerHTML = "";
+
+    if (songs.length === 0) {
+        box.innerHTML = "<p>هنوز آهنگی اضافه نشده است.</p>";
+        return;
+    }
+
+    songs.forEach((song, index) => {
+        box.innerHTML += `
+            <div class="song">
+                <h3>🎵 ${song.name}</h3>
+                <audio controls src="${song.url}"></audio>
+                <br>
+                <button onclick="deleteSong(${index})">
+                    حذف آهنگ
+                </button>
+            </div>
+        `;
+    });
+}
+
+function addSong() {
+    const name = document.getElementById("songName").value.trim();
+    const file = document.getElementById("songFile").files[0];
+
+    if (!name || !file) {
+        alert("نام آهنگ و فایل صوتی را انتخاب کن!");
+        return;
+    }
+
+    const url = URL.createObjectURL(file);
+
+    songs.push({
+        name: name,
+        url: url
+    });
+
+    renderSongs();
+
+    document.getElementById("songName").value = "";
+    document.getElementById("songFile").value = "";
+}
+
+function deleteSong(index) {
+    URL.revokeObjectURL(songs[index].url);
+    songs.splice(index, 1);
+    renderSongs();
+}
+
+function searchSongs() {
+    const value = document.getElementById("search").value.trim().toLowerCase();
+
+    document.querySelectorAll(".song").forEach(song => {
+        song.style.display =
+            song.innerText.toLowerCase().includes(value)
+            ? "block"
+            : "none";
+    });
+}
+</script>
+
+</body>
+</html>
+
+
